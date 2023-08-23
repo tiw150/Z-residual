@@ -48,7 +48,7 @@ plot(coxzph_test_drs, var = 4,main="Cox PH Model",xlab="Event Time",ylim=c(-6,9)
 text(24, 8.8, paste0("Score Tests Diabetes p-value = ", sprintf("%3.2f",coxzph_test_drs$table[4,3])))
 dev.off()
 
-qr_drs1<-qresidual.coxph (fit_coxph = fit_drs1,
+qr_drs1<-zresidual.coxph (fit_coxph = fit_drs1,
                           traindata = drs,newdata = drs)
 resids_drs1<-allresidual.coxph (fit_coxph = fit_drs1,
                                 traindata = drs, newdata = drs)
@@ -293,7 +293,7 @@ for(j in 1:n_sims ){
     cat(paste("Time for 1 simulation: ",elapsed/3600," hours \n"))
     cat(paste("Estimated time remaining: ",elapsed/3600*(n_sims-1)," hours \n"))
   }
-  qr_drs1<-qresidual.coxph (fit_coxph = fit_drs1,
+  qr_drs1<-zresidual.coxph (fit_coxph = fit_drs1,
                             traindata = drs,newdata = drs)
   sw_fit_drs1[j]<-shapiro.test(qr_drs1)$p.value
   anov_fit_drs1[j]<-test.nl.aov1(qresidual=qr_drs1, 

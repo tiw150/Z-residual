@@ -1,5 +1,5 @@
 ####### coxph package  ####################################################
-qresidual.coxph <- function (fit_coxph, traindata, newdata)
+zresidual.coxph <- function (fit_coxph, traindata, newdata)
 {
   if (!requireNamespace("pacman")) {
     install.packages("pacman")
@@ -120,44 +120,42 @@ qresidual.coxph <- function (fit_coxph, traindata, newdata)
   RSP[censored] <- RSP[censored]*runif(n.censored)
   #R_H(t)
   log_Rcum_haz<- log(-log(RSP))
-  nrsp <- -qnorm(RSP)
-  attr(nrsp, "SP") <- SP
-  attr(nrsp, "log_Rcum_haz") <- log_Rcum_haz
-  # attr(nrsp, "hazfn") <- hazfn
-  #  attr(nrsp, "z_hat_new") <- z_hat_new
-  return(nrsp)
+  Z_resid <- -qnorm(RSP)
+  attr(Z_resid, "SP") <- SP
+  attr(Z_resid, "log_Rcum_haz") <- log_Rcum_haz
+  return(Z_resid)
 }
 
 #basehaz(fit_kidney1,centered = F)
-test.nl.aov1 <- function(qresidual, fitted.values, k.anova=10)
+test.nl.aov1 <- function(zresidual, fitted.values, k.anova=10)
 {
   lpred.bin <- cut(fitted.values, k.anova)
   less2_factor<-which(tapply(lpred.bin,lpred.bin,length)<= 2)
   if(rlang::is_empty(names(less2_factor))){
-    anova(lm(qresidual ~ lpred.bin))$`Pr(>F)`[1]
+    anova(lm(zresidual ~ lpred.bin))$`Pr(>F)`[1]
   }else{
     vector_less2_factor<-rep(length(less2_factor))
     for(j in 1:length(less2_factor)){
       vector_less2_factor[j]<-which(lpred.bin==names(less2_factor[j]))
     }
     new.lpred.bin<- lpred.bin[-vector_less2_factor]
-    new.qresidual<-qresidual[-vector_less2_factor]
-    anova(lm(new.qresidual ~ new.lpred.bin))$`Pr(>F)`[1]
+    new.zresiduall<-zresidual[-vector_less2_factor]
+    anova(lm(new.zresidual ~ new.lpred.bin))$`Pr(>F)`[1]
   }
 }
 
 
-test.nl.aov1.categ <- function(qresidual, fitted.values)
+test.nl.aov1.categ <- function(zresidual, fitted.values)
 {
   lpred.bin <- fitted.values
-  anova(lm(qresidual ~ lpred.bin))$`Pr(>F)`[1]
+  anova(lm(zresidual ~ lpred.bin))$`Pr(>F)`[1]
 }
 
 
-test.var.bartl <- function(qresidual, fitted.values, k=10)
+test.var.bartl <- function(zresidual, fitted.values, k=10)
 {
   lpred.bin <- cut(fitted.values, k)
-  Z_group<- split(qresidual, lpred.bin)
+  Z_group<- split(zresidual, lpred.bin)
   check_Z_group<-rep(k)
   for(i in 1:k)
   {
@@ -173,10 +171,10 @@ test.var.bartl <- function(qresidual, fitted.values, k=10)
   }
 }
 
-test.var.bartl.categ <- function(qresidual, fitted.values)
+test.var.bartl.categ <- function(zresidual, fitted.values)
 {
   lpred.bin <- fitted.values
-  Z_group<- split(qresidual, lpred.bin)
+  Z_group<- split(zresidual, lpred.bin)
   bartlett.test(Z_group)[["p.value"]]
 }
 

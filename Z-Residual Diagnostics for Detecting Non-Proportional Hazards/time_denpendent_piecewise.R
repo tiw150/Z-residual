@@ -26,7 +26,7 @@ fit_coxph_nonph_data <- tryCatch(
 )
 coxzph_test_w<-cox.zph(fit_coxph_nonph_data, transform="identity");coxzph_test_w
 
-coxph_qr_w<-qresidual.coxph (fit_coxph = fit_coxph_nonph_data,
+coxph_qr_w<-zresidual.coxph (fit_coxph = fit_coxph_nonph_data,
                              traindata = nonph_data,
                              newdata = nonph_data)
 sw_coxph_w<-shapiro.test(coxph_qr_w)$p.value;sw_coxph_w
@@ -71,7 +71,7 @@ fit_coxph_ph_data <- tryCatch(
 )
 coxzph_test_t<-cox.zph(fit_coxph_ph_data, transform="identity");coxzph_test_t
 
-coxph_qr_t<-qresidual.coxph (fit_coxph = fit_coxph_ph_data,
+coxph_qr_t<-zresidual.coxph (fit_coxph = fit_coxph_ph_data,
                              traindata = ph_data,
                              newdata = ph_data)
 sw_coxph_t<-shapiro.test(coxph_qr_t)$p.value;sw_coxph_t

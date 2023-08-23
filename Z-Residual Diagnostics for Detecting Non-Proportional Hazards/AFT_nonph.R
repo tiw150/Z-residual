@@ -24,7 +24,7 @@ fit_coxph_aftln_data <- tryCatch(
 )
 
 coxzph_test_w<-cox.zph(fit_coxph_aftln_data,transform="identity");coxzph_test_w
-coxph_qr_ln<-qresidual.coxph (fit_coxph = fit_coxph_aftln_data,
+coxph_qr_ln<-zresidual.coxph (fit_coxph = fit_coxph_aftln_data,
                              traindata = aft_ln_data,
                              newdata = aft_ln_data)
 
@@ -62,7 +62,7 @@ fit_coxph_aftwb_data <- tryCatch(
 )
 
 coxzph_test_wb<-cox.zph(fit_coxph_aftwb_data,transform="identity");coxzph_test_wb
-coxph_qr_wb<-qresidual.coxph (fit_coxph = fit_coxph_aftwb_data,
+coxph_qr_wb<-zresidual.coxph (fit_coxph = fit_coxph_aftwb_data,
                              traindata = aft_wb_data,
                              newdata = aft_wb_data)
 
